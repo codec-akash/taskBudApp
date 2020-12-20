@@ -2,6 +2,8 @@ import 'package:Taskbud/Utils/theme.dart';
 import 'package:Taskbud/pages/dashBoardpage/dashboard_page.dart';
 import 'package:Taskbud/pages/historyPage/history_page.dart';
 import 'package:Taskbud/pages/taskPage/add_task.dart';
+import 'package:Taskbud/providers/auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +24,31 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await Provider.of<Auth>(context, listen: false).logout();
+            },
+          ),
+          FlatButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -45,6 +72,13 @@ class _HomePageState extends State<HomePage> {
                   theme.toggleTheme();
                 },
               ),
+            ),
+            ListTile(
+              leading: Text("Logout"),
+              onTap: () {
+                Navigator.of(context).pop();
+                _showDialog("Are you Sure you want to Logout");
+              },
             ),
           ],
         ),

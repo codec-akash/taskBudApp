@@ -30,7 +30,6 @@ class ApiCall {
         headers: {"Content-Type": "application/json"},
         body: json.encode(payload),
       );
-      print("objectAPI");
       print(uriResponse.body);
       return ApiResponseHandler.output(uriResponse);
     } catch (error) {

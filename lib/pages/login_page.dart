@@ -65,6 +65,9 @@ class _LoginPageState extends State<LoginPage> {
             'Could not authenticate you. Please try again later.';
         _showErrorDialog(errorMessage);
       }
+      setState(() {
+        isLoading = false;
+      });
     } else {
       print("invalid");
     }
@@ -75,8 +78,9 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
+          alignment: Alignment.bottomCenter,
           height: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 14.0),
           decoration: BoxDecoration(
             gradient: backgroundGradient,
           ),
@@ -144,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Password',
                       labelStyle: hintStyle,
                     ),
-                    obscureText: showPassword,
+                    obscureText: !showPassword,
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value.isEmpty || value.length < 6) {
@@ -154,9 +158,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     onChanged: (newValue) {
                       _userPassword = newValue;
-                      print("object");
-                      print(newValue);
-                      print(_userPassword);
                     },
                   ),
                   SizedBox(
@@ -169,21 +170,23 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    width: double.infinity,
-                    child: RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                      onPressed: _trySubmit,
-                    ),
-                  ),
+                  isLoading
+                      ? Center(child: Text("Loggin IN"))
+                      : Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          width: double.infinity,
+                          child: RaisedButton(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                            onPressed: _trySubmit,
+                          ),
+                        ),
                   SizedBox(
                     height: 10,
                   ),

@@ -14,33 +14,30 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(
-              value: Auth(),
-            ),
-          ],
-          child: Consumer<Auth>(
-            builder: (ctx, auth, _) => MaterialApp(
-              title: "Task Bud",
-              theme: notifier.darkTheme ? dark : light,
-              home: auth.isAuth
-                  ? HomePage()
-                  : FutureBuilder(
-                      future: auth.tryAutoLogin(),
-                      builder: (ctx, authSnapShot) =>
-                          authSnapShot.connectionState ==
-                                  ConnectionState.waiting
-                              ? SplashScreen()
-                              : LoginPage(),
-                    ),
-            ),
-          ),
-        );
-      }),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ThemeNotifier(),
+        ),
+      ],
+      child: Consumer2<Auth, ThemeNotifier>(
+        builder: (ctx, auth, theme, _) => MaterialApp(
+          title: "Task Bud",
+          theme: theme.darkTheme ? dark : light,
+          home: auth.isAuth
+              ? HomePage()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authSnapShot) =>
+                      authSnapShot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : LoginPage(),
+                ),
+        ),
+      ),
     );
   }
 }

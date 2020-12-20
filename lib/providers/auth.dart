@@ -46,7 +46,6 @@ class Auth with ChangeNotifier {
       final userData = json.encode({'token': _token});
       prefs.setString('userToken', userData);
     } catch (e) {
-      print("NULL");
       throw e;
     }
   }
@@ -63,5 +62,12 @@ class Auth with ChangeNotifier {
     notifyListeners();
 
     return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 }
