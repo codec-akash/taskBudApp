@@ -1,3 +1,5 @@
+import 'package:Taskbud/pages/splash_screen.dart';
+import 'package:Taskbud/providers/auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -15,10 +17,28 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ThemeNotifier(),
       child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-        return MaterialApp(
-          title: "Task Bud",
-          theme: notifier.darkTheme ? dark : light,
-          home: LoginPage(),
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(
+              value: Auth(),
+            ),
+          ],
+          child: Consumer<Auth>(
+            builder: (ctx, auth, _) => MaterialApp(
+              title: "Task Bud",
+              theme: notifier.darkTheme ? dark : light,
+              home: auth.isAuth
+                  ? HomePage()
+                  : FutureBuilder(
+                      future: auth.tryAutoLogin(),
+                      builder: (ctx, authSnapShot) =>
+                          authSnapShot.connectionState ==
+                                  ConnectionState.waiting
+                              ? SplashScreen()
+                              : LoginPage(),
+                    ),
+            ),
+          ),
         );
       }),
     );

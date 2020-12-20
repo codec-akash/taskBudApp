@@ -1,6 +1,9 @@
 import 'package:Taskbud/Utils/app_media_query.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
+import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/providers/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Utils/global.dart';
 
@@ -24,6 +27,24 @@ class _LoginPageState extends State<LoginPage> {
     return emailValid;
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   Future<void> _trySubmit() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
@@ -31,6 +52,19 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = true;
       });
+      try {
+        print("reached");
+        print(_userPassword);
+        await Provider.of<Auth>(context, listen: false)
+            .login(_userEmail, _userPassword);
+      } on HttpException catch (error) {
+        print(error);
+        _showErrorDialog(error.toString());
+      } catch (error) {
+        const errorMessage =
+            'Could not authenticate you. Please try again later.';
+        _showErrorDialog(errorMessage);
+      }
     } else {
       print("invalid");
     }
@@ -40,16 +74,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Form(
-          key: _formKey,
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-            decoration: BoxDecoration(
-              gradient: backgroundGradient,
-            ),
-            child: Container(
-              height: AppMediaQuery(context).appHeight(90.0),
+        body: Container(
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+          decoration: BoxDecoration(
+            gradient: backgroundGradient,
+          ),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -86,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    onSaved: (newValue) {
+                    onChanged: (newValue) {
                       _userEmail = newValue;
                     },
                   ),
@@ -119,8 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    onSaved: (newValue) {
+                    onChanged: (newValue) {
                       _userPassword = newValue;
+                      print("object");
+                      print(newValue);
+                      print(_userPassword);
                     },
                   ),
                   SizedBox(
