@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:Taskbud/pages/home_page.dart';
+
 import 'package:provider/provider.dart';
+
+import 'package:Taskbud/pages/login_page.dart';
+import 'package:Taskbud/pages/home_page.dart';
 
 import 'Utils/theme.dart';
 
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: "Task Bud",
           theme: notifier.darkTheme ? dark : light,
-          home: HomePage(),
+          home: LoginPage(),
         );
       }),
     );
