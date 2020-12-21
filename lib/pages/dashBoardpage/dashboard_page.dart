@@ -1,4 +1,7 @@
+import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashBoardPage extends StatefulWidget {
   @override
@@ -6,10 +9,51 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        Provider.of<TaskProvider>(context).fetchTasks().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } on HttpException catch (error) {
+        print("ONHTTP$error");
+        // _showErrorDialog(error.toString());
+      } catch (error) {
+        print("ONCATCH$error");
+        const errorMessage =
+            'Could not connect to server. Please try again later.';
+        // _showErrorDialog(errorMessage);
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override

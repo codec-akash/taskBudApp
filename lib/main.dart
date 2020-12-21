@@ -1,6 +1,7 @@
 import 'package:Taskbud/pages/signup_page.dart';
 import 'package:Taskbud/pages/splash_screen.dart';
 import 'package:Taskbud/providers/auth.dart';
+import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -22,6 +23,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: ThemeNotifier(),
+        ),
+        ChangeNotifierProxyProvider<Auth, TaskProvider>(
+          create: (context) {},
+          update: (ctx, auth, previousTask) => TaskProvider(
+            auth.token,
+            previousTask == null ? [] : previousTask.tasks,
+          ),
         ),
       ],
       child: Consumer2<Auth, ThemeNotifier>(

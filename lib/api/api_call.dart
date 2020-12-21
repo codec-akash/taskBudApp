@@ -20,7 +20,39 @@ class ApiCall {
     }
   }
 
+  Future<Map<String, dynamic>> getCallAuth(String endPoint, String auth) async {
+    var client = new http.Client();
+    String url = BASE_URL + endPoint;
+    print(url);
+    try {
+      var uriResponse = await client.get(
+        url,
+        headers: {"x-access-token": auth},
+      );
+      return ApiResponseHandler.output(uriResponse);
+    } catch (error) {
+      return ApiResponseHandler.outputError();
+    }
+  }
+
   Future<Map<String, dynamic>> postNoAuth(String endPoint, payload) async {
+    var client = new http.Client();
+    String url = BASE_URL + endPoint;
+    print(url);
+    try {
+      var uriResponse = await client.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(payload),
+      );
+      print(uriResponse.body);
+      return ApiResponseHandler.output(uriResponse);
+    } catch (error) {
+      return ApiResponseHandler.outputError();
+    }
+  }
+
+  Future<Map<String, dynamic>> postAuth(String endPoint, payload) async {
     var client = new http.Client();
     String url = BASE_URL + endPoint;
     print(url);
