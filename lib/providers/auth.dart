@@ -50,6 +50,33 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future<void> register(
+      {String email, String password, String name, String phoneNumber}) async {
+    final url = "user/register";
+    Map<String, dynamic> payload = {
+      "email": email.trim(),
+      "password": password.trim(),
+      "first_name": name.trim(),
+      "phonenumber": phoneNumber.trim(),
+    };
+    try {
+      Map<String, dynamic> response = await ApiCall().postNoAuth(url, payload);
+      if (response["error"] != null) {
+        loginResponse = LoginResponse.fromJson(response["error"]);
+        throw HttpException(loginResponse.message);
+      }
+      loginResponse = LoginResponse.fromJson(response["result"]);
+      _token = loginResponse.token;
+      notifyListeners();
+
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({'token': _token});
+      prefs.setString('userToken', userData);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userToken')) {

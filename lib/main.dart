@@ -1,3 +1,4 @@
+import 'package:Taskbud/pages/signup_page.dart';
 import 'package:Taskbud/pages/splash_screen.dart';
 import 'package:Taskbud/providers/auth.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
                           ? SplashScreen()
                           : LoginPage(),
                 ),
+          routes: {
+            SignUpPage.routeName: (ctx) => SignUpPage(),
+          },
         ),
       ),
     );

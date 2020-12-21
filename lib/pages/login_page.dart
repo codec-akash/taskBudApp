@@ -1,6 +1,7 @@
 import 'package:Taskbud/Utils/app_media_query.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/pages/signup_page.dart';
 import 'package:Taskbud/providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,14 +54,13 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = true;
       });
       try {
-        print("reached");
-        print(_userPassword);
         await Provider.of<Auth>(context, listen: false)
             .login(_userEmail, _userPassword);
       } on HttpException catch (error) {
         print(error);
         _showErrorDialog(error.toString());
       } catch (error) {
+        print(error);
         const errorMessage =
             'Could not authenticate you. Please try again later.';
         _showErrorDialog(errorMessage);
@@ -188,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Divider(
                     color: Colors.white,
@@ -202,8 +202,10 @@ class _LoginPageState extends State<LoginPage> {
                     child: InkWell(
                       child: Text(
                         "Don't have Acc, Sign-Up!",
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        style: secondaryHeader,
                       ),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed(SignUpPage.routeName),
                     ),
                   ),
                 ],

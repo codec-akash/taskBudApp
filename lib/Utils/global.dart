@@ -27,3 +27,9 @@ TextStyle mainHeader = TextStyle(
   fontSize: 30.0,
   fontWeight: FontWeight.bold,
 );
+
+TextStyle secondaryHeader = TextStyle(
+  fontSize: 16.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
