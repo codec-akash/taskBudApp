@@ -21,6 +21,10 @@ class TaskBudIcon {
   static const _kFontFam = 'TaskBudIcon';
   static const _kFontPkg = null;
 
-  static const IconData signup = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData login = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData password = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData at_circle = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData phone_portrait_sharp = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData call_sharp = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData eye_open = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData eye_off = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

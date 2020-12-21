@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.snooze),
+                      prefixIcon: Icon(TaskBudIcon.at_circle),
                       border: OutlineInputBorder(
                         borderSide: textFieldBorderSide,
                         borderRadius: textFieldBorderRadius,
@@ -132,13 +132,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.snooze),
+                      prefixIcon: Icon(TaskBudIcon.password),
                       border: OutlineInputBorder(
                         borderSide: textFieldBorderSide,
                         borderRadius: textFieldBorderRadius,
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.panorama_fish_eye),
+                        icon: showPassword
+                            ? Icon(TaskBudIcon.eye_open)
+                            : Icon(TaskBudIcon.eye_off),
                         onPressed: () {
                           setState(() {
                             showPassword = !showPassword;

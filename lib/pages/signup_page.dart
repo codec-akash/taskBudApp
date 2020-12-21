@@ -1,5 +1,6 @@
 import 'package:Taskbud/Utils/app_media_query.dart';
 import 'package:Taskbud/Utils/global.dart';
+import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/models/http_exception.dart';
 import 'package:Taskbud/providers/auth.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.snooze),
+                          prefixIcon: Icon(Icons.account_box_rounded),
                           border: OutlineInputBorder(
                             borderSide: textFieldBorderSide,
                             borderRadius: textFieldBorderRadius,
@@ -149,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.snooze),
+                          prefixIcon: Icon(TaskBudIcon.at_circle),
                           border: OutlineInputBorder(
                             borderSide: textFieldBorderSide,
                             borderRadius: textFieldBorderRadius,
@@ -173,7 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.snooze),
+                          prefixIcon: Icon(TaskBudIcon.call_sharp),
                           border: OutlineInputBorder(
                             borderSide: textFieldBorderSide,
                             borderRadius: textFieldBorderRadius,
@@ -199,13 +200,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.snooze),
+                          prefixIcon: Icon(TaskBudIcon.password),
                           border: OutlineInputBorder(
                             borderSide: textFieldBorderSide,
                             borderRadius: textFieldBorderRadius,
                           ),
                           suffixIcon: IconButton(
-                            icon: Icon(Icons.panorama_fish_eye),
+                            icon: showPassword
+                                ? Icon(TaskBudIcon.eye_open)
+                                : Icon(TaskBudIcon.eye_off),
                             onPressed: () {
                               setState(() {
                                 showPassword = !showPassword;
