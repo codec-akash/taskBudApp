@@ -1,4 +1,5 @@
 import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/pages/dashBoardpage/task_list.dart';
 import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,8 +48,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
         // _showErrorDialog(error.toString());
       } catch (error) {
         print("ONCATCH$error");
-        const errorMessage =
-            'Could not connect to server. Please try again later.';
         // _showErrorDialog(errorMessage);
       }
     }
@@ -60,7 +59,11 @@ class _DashBoardPageState extends State<DashBoardPage> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("DashBoard"),
+        child: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : TaskList(),
       ),
     );
   }
