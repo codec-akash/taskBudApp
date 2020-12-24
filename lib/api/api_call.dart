@@ -52,14 +52,21 @@ class ApiCall {
     }
   }
 
-  Future<Map<String, dynamic>> postAuth(String endPoint, payload) async {
+  Future<Map<String, dynamic>> postAuth(
+    String endPoint,
+    String auth,
+    payload,
+  ) async {
     var client = new http.Client();
     String url = BASE_URL + endPoint;
     print(url);
     try {
       var uriResponse = await client.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": auth,
+        },
         body: json.encode(payload),
       );
       print(uriResponse.body);

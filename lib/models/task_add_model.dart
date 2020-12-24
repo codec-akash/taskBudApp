@@ -1,27 +1,26 @@
-class TaskModel {
-  List<Tasks> tasks;
+class TaskAddModel {
+  String message;
+  Result result;
 
-  TaskModel({this.tasks});
+  TaskAddModel({this.message, this.result});
 
-  TaskModel.fromJson(Map<String, dynamic> json) {
-    if (json['tasks'] != null && json['tasks'] != []) {
-      tasks = new List<Tasks>();
-      json['tasks'].forEach((v) {
-        tasks.add(new Tasks.fromJson(v));
-      });
-    }
+  TaskAddModel.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    result =
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.tasks != null) {
-      data['tasks'] = this.tasks.map((v) => v.toJson()).toList();
+    data['message'] = this.message;
+    if (this.result != null) {
+      data['result'] = this.result.toJson();
     }
     return data;
   }
 }
 
-class Tasks {
+class Result {
   int id;
   String userid;
   String taskId;
@@ -31,7 +30,7 @@ class Tasks {
   String startTime;
   String endTime;
 
-  Tasks(
+  Result(
       {this.id,
       this.userid,
       this.taskId,
@@ -41,7 +40,7 @@ class Tasks {
       this.startTime,
       this.endTime});
 
-  Tasks.fromJson(Map<String, dynamic> json) {
+  Result.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userid = json['userid'];
     taskId = json['task_id'];

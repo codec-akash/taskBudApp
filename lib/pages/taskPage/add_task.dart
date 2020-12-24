@@ -1,11 +1,206 @@
+import 'package:Taskbud/Utils/app_media_query.dart';
+import 'package:Taskbud/Utils/dateUtil.dart';
+import 'package:Taskbud/Utils/global.dart';
+import 'package:Taskbud/icons/task_bud_icon_icons.dart';
+import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
-class AddTaskPage extends StatelessWidget {
+class AddTaskPage extends StatefulWidget {
+  @override
+  _AddTaskPageState createState() => _AddTaskPageState();
+}
+
+class _AddTaskPageState extends State<AddTaskPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
+
+  String _taskName;
+  String _taskDescription;
+  String start_time;
+  String dateStart;
+  String dateEnd;
+  String end_time;
+
+  Future<void> _trySubmit() async {
+    final isValid = _formKey.currentState.validate();
+    if (isValid) {
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        await Provider.of<TaskProvider>(context, listen: false).addTask(
+          _taskName,
+          _taskDescription,
+          false,
+          dateStart,
+          dateEnd,
+        );
+      } on HttpException catch (error) {
+        print("ONHTTP$error");
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (error) {
+        print("ONCATCH$error");
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+        // _showErrorDialog(errorMessage);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: Text("Task"),
+      padding: EdgeInsets.all(10.0),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Image.asset(
+                  "images/addTask.png",
+                  height: AppMediaQuery(context).appHeight(20.0),
+                  alignment: Alignment.bottomRight,
+                ),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(TaskBudIcon.at_circle),
+                  border: OutlineInputBorder(
+                    borderSide: textFieldBorderSide,
+                    borderRadius: textFieldBorderRadius,
+                  ),
+                  labelText: 'Task-Name',
+                  labelStyle: hintStyle,
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "Task-Name can't be empty";
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  _taskName = value;
+                },
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(TaskBudIcon.at_circle),
+                  border: OutlineInputBorder(
+                    borderSide: textFieldBorderSide,
+                    borderRadius: textFieldBorderRadius,
+                  ),
+                  labelText: 'Task-Description',
+                  labelStyle: hintStyle,
+                ),
+                onChanged: (value) {
+                  _taskDescription = value;
+                },
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text("Start Time :"),
+              SizedBox(
+                height: 10.0,
+              ),
+              GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    border: Border.all(width: 1.0),
+                  ),
+                  alignment: Alignment.center,
+                  child: start_time == null
+                      ? Text("Start Time")
+                      : Text(start_time),
+                ),
+                onTap: () {
+                  DatePicker.showDateTimePicker(
+                    context,
+                    showTitleActions: true,
+                    onConfirm: (date) {
+                      print("CURRENT TIME $date");
+                      dateStart = date.toIso8601String();
+                      setState(() {
+                        start_time = DateUtil().dateformatDefault(date);
+                      });
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text("End Time :"),
+              SizedBox(
+                height: 10.0,
+              ),
+              GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    border: Border.all(width: 1.0),
+                  ),
+                  alignment: Alignment.center,
+                  child: end_time == null ? Text("End Time") : Text(end_time),
+                ),
+                onTap: () {
+                  DatePicker.showDateTimePicker(
+                    context,
+                    showTitleActions: true,
+                    onConfirm: (date) {
+                      print("CURRENT TIME $date");
+                      dateEnd = date.toIso8601String();
+                      setState(() {
+                        end_time = DateUtil().dateformatDefault(date);
+                      });
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                height: 16.0,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                width: double.infinity,
+                child: RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Text(
+                    "Add Task",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  onPressed: _trySubmit,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,12 +1,15 @@
-import 'package:Taskbud/api/api_call.dart';
-import 'package:Taskbud/models/http_exception.dart';
+import 'dart:io';
+
 import 'package:Taskbud/models/login_response.dart';
+import 'package:Taskbud/models/task_add_model.dart';
 import 'package:Taskbud/models/task_model.dart';
 
-class DashBoardApi {
-  Future<TaskModel> getTaskList(String auth) async {
-    final url = "task/";
-    var data = await ApiCall().getCallAuth(url, auth);
+import '../api_call.dart';
+
+class AddTaskApi {
+  Future<TaskAddModel> addTask(String auth, payload) async {
+    final url = "task/addTask";
+    var data = await ApiCall().postAuth(url, auth, payload);
     if (data["error"] != null) {
       print(data["error"]);
       var loginResponse = LoginResponse.fromJson(data["error"]);
@@ -14,7 +17,7 @@ class DashBoardApi {
     }
     Map<String, dynamic> output = data["result"];
     print(data["result"]);
-    TaskModel taskModel = TaskModel.fromJson(output);
+    TaskAddModel taskModel = TaskAddModel.fromJson(output);
     // print(taskModel.tasks[0].id);
     return taskModel;
   }

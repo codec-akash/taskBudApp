@@ -12,6 +12,8 @@ class DashBoardPage extends StatefulWidget {
 class _DashBoardPageState extends State<DashBoardPage> {
   var _isInit = true;
   var _isLoading = false;
+  var isError = false;
+  int len = 0;
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -34,25 +36,51 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _isLoading = true;
       });
       try {
         Provider.of<TaskProvider>(context).fetchTasks().then((_) {
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+              len =
+                  Provider.of<TaskProvider>(context, listen: false).tasklength;
+              print(len);
+            });
+          }
         });
       } on HttpException catch (error) {
         print("ONHTTP$error");
-        // _showErrorDialog(error.toString());
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            isError = true;
+          });
+        }
       } catch (error) {
         print("ONCATCH$error");
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            isError = true;
+          });
+        }
         // _showErrorDialog(errorMessage);
       }
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
   }
 
   @override
@@ -63,7 +91,15 @@ class _DashBoardPageState extends State<DashBoardPage> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : TaskList(),
+            : isError
+                ? Center(
+                    child: Text("Error Try Again"),
+                  )
+                : len == 0
+                    ? Center(
+                        child: Text("No Data"),
+                      )
+                    : TaskList(),
       ),
     );
   }

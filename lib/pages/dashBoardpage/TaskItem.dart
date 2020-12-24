@@ -43,7 +43,7 @@ class TaskItem extends StatelessWidget {
               ),
             ],
           ),
-          Text(taskDescription),
+          taskDescription != null ? Text(taskDescription) : Container(),
           SizedBox(
             height: 10.0,
           ),

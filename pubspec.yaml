@@ -31,6 +31,8 @@ dependencies:
   shared_preferences: ^0.5.12+4
   provider: ^4.3.2+3
   http: ^0.12.2
+  flutter_datetime_picker: ^1.4.0
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +53,7 @@ flutter:
   assets:
     - images/login.png
     - images/signup.png
+    - images/addTask.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
