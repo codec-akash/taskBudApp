@@ -1,4 +1,5 @@
 import 'package:Taskbud/Utils/theme.dart';
+import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/pages/dashBoardpage/dashboard_page.dart';
 import 'package:Taskbud/pages/historyPage/history_page.dart';
 import 'package:Taskbud/pages/taskPage/add_task.dart';
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
             elevation: 20,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.ac_unit),
+                icon: Icon(TaskBudIcon.tasks),
                 label: 'Home',
               ),
               BottomNavigationBarItem(

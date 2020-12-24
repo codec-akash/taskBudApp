@@ -21,4 +21,19 @@ class AddTaskApi {
     // print(taskModel.tasks[0].id);
     return taskModel;
   }
+
+  Future<LoginResponse> updateTask(String auth, payload, taskId) async {
+    final url = "task/$taskId";
+    var data = await ApiCall().putAuth(url, auth, payload);
+    if (data["error"] != null) {
+      print(data["error"]);
+      var loginResponse = LoginResponse.fromJson(data["error"]);
+      throw HttpException(loginResponse.message);
+    }
+    Map<String, dynamic> output = data["result"];
+    print(data["result"]);
+    LoginResponse loginResponse = LoginResponse.fromJson(output);
+    // print(taskModel.tasks[0].id);
+    return loginResponse;
+  }
 }

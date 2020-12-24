@@ -75,4 +75,28 @@ class ApiCall {
       return ApiResponseHandler.outputError();
     }
   }
+
+  Future<Map<String, dynamic>> putAuth(
+    String endPoint,
+    String auth,
+    payload,
+  ) async {
+    var client = new http.Client();
+    String url = BASE_URL + endPoint;
+    print(url);
+    try {
+      var uriResponse = await client.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": auth,
+        },
+        body: json.encode(payload),
+      );
+      print(uriResponse.body);
+      return ApiResponseHandler.output(uriResponse);
+    } catch (error) {
+      return ApiResponseHandler.outputError();
+    }
+  }
 }

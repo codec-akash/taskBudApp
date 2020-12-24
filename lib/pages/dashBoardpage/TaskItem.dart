@@ -1,7 +1,11 @@
 import 'package:Taskbud/Utils/global.dart';
+import 'package:Taskbud/icons/task_bud_icon_icons.dart';
+import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TaskItem extends StatelessWidget {
+class TaskItem extends StatefulWidget {
+  final String taskId;
   final String taskName;
   final String taskDescription;
   final bool isComplete;
@@ -9,12 +13,48 @@ class TaskItem extends StatelessWidget {
   final String endTime;
 
   const TaskItem({
+    this.taskId,
     this.taskName,
     this.taskDescription,
     this.isComplete,
     this.startTime,
     this.endTime,
   });
+
+  @override
+  _TaskItemState createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
+  Future<void> updateTask() async {
+    try {
+      await Provider.of<TaskProvider>(context, listen: false).updateTask(
+        widget.taskName,
+        widget.taskDescription,
+        widget.isComplete,
+        widget.startTime,
+        widget.endTime,
+        widget.taskId,
+      );
+    } catch (e) {
+      print(e);
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An error occurred!'),
+          content: Text('Something went wrong.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +71,32 @@ class TaskItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                taskName,
+                widget.taskName,
                 style: headerStyle,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(icon: Icon(Icons.cake), onPressed: () {}),
-                  IconButton(icon: Icon(Icons.cake), onPressed: () {}),
+                  IconButton(
+                    icon: Icon(
+                      widget.isComplete
+                          ? TaskBudIcon.complete
+                          : TaskBudIcon.crossed_bones,
+                    ),
+                    onPressed: updateTask,
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        TaskBudIcon.delete,
+                      ),
+                      onPressed: () {}),
                 ],
               ),
             ],
           ),
-          taskDescription != null ? Text(taskDescription) : Container(),
+          widget.taskDescription != null
+              ? Text(widget.taskDescription)
+              : Container(),
           SizedBox(
             height: 10.0,
           ),
@@ -53,7 +106,7 @@ class TaskItem extends StatelessWidget {
               SizedBox(
                 width: 10.0,
               ),
-              Text(startTime),
+              Text(widget.startTime),
             ],
           ),
           Row(
@@ -62,7 +115,7 @@ class TaskItem extends StatelessWidget {
               SizedBox(
                 width: 10.0,
               ),
-              Text(endTime),
+              Text(widget.endTime),
             ],
           ),
         ],
