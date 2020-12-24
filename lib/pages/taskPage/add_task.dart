@@ -26,7 +26,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String end_time;
 
   Future<void> _trySubmit() async {
-    final isValid = _formKey.currentState.validate();
+    var isValid = _formKey.currentState.validate();
+    if (dateStart == null || dateEnd == null) {
+      isValid = false;
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          duration: Duration(seconds: 3),
+          content: Text(
+            "Date Cannot be empty",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }
     if (isValid) {
       setState(() {
         isLoading = true;
@@ -141,8 +156,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     showTitleActions: true,
                     onConfirm: (date) {
                       print("CURRENT TIME $date");
-                      dateStart = date.toIso8601String();
                       setState(() {
+                        dateStart = date.toIso8601String();
                         start_time = DateUtil().dateformatDefault(date);
                       });
                     },
@@ -170,6 +185,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   DatePicker.showDateTimePicker(
                     context,
                     showTitleActions: true,
+                    minTime: DateTime.parse(dateStart) ?? DateTime.now(),
                     onConfirm: (date) {
                       print("CURRENT TIME $date");
                       dateEnd = date.toIso8601String();
