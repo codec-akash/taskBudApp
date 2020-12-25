@@ -21,6 +21,10 @@ class TaskProvider with ChangeNotifier {
     return _tasks.length;
   }
 
+  bool isComplete(int i) {
+    return _tasks[i].completed;
+  }
+
   Future<void> fetchTasks() async {
     try {
       List<Tasks> tasks = [];
@@ -91,12 +95,13 @@ class TaskProvider with ChangeNotifier {
         payload,
         taskId,
       );
-      if (loginResponse.message == "Success") {
-        print("SUCEESS");
-        Tasks task = _tasks.firstWhere((element) => element.taskId == taskId);
-        task.completed = completed;
-        _tasks[_tasks.indexWhere((element) => element.taskId == taskId)] = task;
-      }
+      Tasks task = _tasks.firstWhere((element) => element.taskId == taskId);
+      task.completed = completed;
+      task.taskName = taskName;
+      task.description = taskDescription;
+      task.startTime = startTime;
+      task.endTime = endTime;
+      _tasks[_tasks.indexWhere((element) => element.taskId == taskId)] = task;
       notifyListeners();
     } catch (error) {
       print(error);

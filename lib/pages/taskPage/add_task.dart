@@ -20,10 +20,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   String _taskName;
   String _taskDescription;
-  String start_time;
+  String startTime;
   String dateStart;
   String dateEnd;
-  String end_time;
+  String endTime;
 
   Future<void> _trySubmit() async {
     var isValid = _formKey.currentState.validate();
@@ -146,9 +146,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     border: Border.all(width: 1.0),
                   ),
                   alignment: Alignment.center,
-                  child: start_time == null
-                      ? Text("Start Time")
-                      : Text(start_time),
+                  child:
+                      startTime == null ? Text("Start Time") : Text(startTime),
                 ),
                 onTap: () {
                   DatePicker.showDateTimePicker(
@@ -158,7 +157,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       print("CURRENT TIME $date");
                       setState(() {
                         dateStart = date.toIso8601String();
-                        start_time = DateUtil().dateformatDefault(date);
+                        startTime = DateUtil().dateformatDefault(date);
                       });
                     },
                   );
@@ -179,7 +178,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     border: Border.all(width: 1.0),
                   ),
                   alignment: Alignment.center,
-                  child: end_time == null ? Text("End Time") : Text(end_time),
+                  child: endTime == null ? Text("End Time") : Text(endTime),
                 ),
                 onTap: () {
                   DatePicker.showDateTimePicker(
@@ -190,7 +189,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       print("CURRENT TIME $date");
                       dateEnd = date.toIso8601String();
                       setState(() {
-                        end_time = DateUtil().dateformatDefault(date);
+                        endTime = DateUtil().dateformatDefault(date);
                       });
                     },
                   );

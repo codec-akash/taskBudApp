@@ -13,12 +13,8 @@ class TaskList extends StatelessWidget {
       child: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (ctx, index) => TaskItem(
-          taskId: tasks[index].taskId,
-          taskName: tasks[index].taskName,
-          taskDescription: tasks[index].description,
-          startTime: tasks[index].startTime,
-          endTime: tasks[index].endTime,
-          isComplete: tasks[index].completed,
+          tasks: tasks[index],
+          index: index,
         ),
       ),
     );
