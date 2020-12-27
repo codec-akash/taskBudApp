@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 class TaskItem extends StatefulWidget {
   final Tasks tasks;
   final int index;
+  final bool show;
 
   const TaskItem({
     this.tasks,
     this.index,
+    this.show,
   });
 
   @override
@@ -103,121 +105,123 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(widget.tasks.taskId),
-      background: Container(
-        color: Theme.of(context).errorColor,
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 40,
-        ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
-        ),
-      ),
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (direction) {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text(
-              'Do you want to remove the item from the cart?',
+    return widget.tasks.completed == widget.show
+        ? Container()
+        : Dismissible(
+            key: ValueKey(widget.tasks.taskId),
+            background: Container(
+              color: Theme.of(context).errorColor,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+                size: 40,
+              ),
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.only(right: 20),
+              margin: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 4,
+              ),
             ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('No'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(false);
-                },
-              ),
-              FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(true);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-      onDismissed: (direction) {
-        deleteTask(widget.tasks.taskId);
-      },
-      child: GestureDetector(
-        onTap: () {
-          _showModalBottom(context);
-        },
-        child: Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-          decoration: BoxDecoration(
-              gradient: Global(context).cardBackgroundGradient(),
-              borderRadius: BorderRadius.circular(18.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.tasks.taskName ?? "",
-                    style: headerStyle,
+            direction: DismissDirection.endToStart,
+            confirmDismiss: (direction) {
+              return showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text('Are you sure?'),
+                  content: Text(
+                    'Do you want to remove the item from the cart?',
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          widget.tasks.completed
-                              ? TaskBudIcon.complete
-                              : TaskBudIcon.hourglass_2,
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('No'),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(false);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Yes'),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(true);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            onDismissed: (direction) {
+              deleteTask(widget.tasks.taskId);
+            },
+            child: GestureDetector(
+              onTap: () {
+                _showModalBottom(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                decoration: BoxDecoration(
+                    gradient: Global(context).cardBackgroundGradient(),
+                    borderRadius: BorderRadius.circular(18.0)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.tasks.taskName ?? "",
+                          style: headerStyle,
                         ),
-                        onPressed: updateTask,
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            TaskBudIcon.delete,
-                          ),
-                          onPressed: () {
-                            showDialogBox(widget.tasks.taskId);
-                          }),
-                    ],
-                  ),
-                ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                widget.tasks.completed
+                                    ? TaskBudIcon.complete
+                                    : TaskBudIcon.hourglass_2,
+                              ),
+                              onPressed: updateTask,
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  TaskBudIcon.delete,
+                                ),
+                                onPressed: () {
+                                  showDialogBox(widget.tasks.taskId);
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                    widget.tasks.description != null
+                        ? Text(widget.tasks.description)
+                        : Container(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.ac_unit),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(widget.tasks.startTime),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.ac_unit),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text((widget.tasks.endTime)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              widget.tasks.description != null
-                  ? Text(widget.tasks.description)
-                  : Container(),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  Icon(Icons.ac_unit),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(widget.tasks.startTime),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.ac_unit),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text((widget.tasks.endTime)),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

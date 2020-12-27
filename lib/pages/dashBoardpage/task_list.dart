@@ -15,6 +15,7 @@ class TaskList extends StatelessWidget {
         itemBuilder: (ctx, index) => TaskItem(
           tasks: tasks[index],
           index: index,
+          show: true, //For incomplete
         ),
       ),
     );
