@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Taskbud/api/addTask/taskApi.dart';
 import 'package:Taskbud/api/dashboard/getTask.dart';
+import 'package:Taskbud/models/http_exception.dart';
 import 'package:Taskbud/models/login_response.dart';
 import 'package:Taskbud/models/task_add_model.dart';
 import 'package:Taskbud/models/task_model.dart';
@@ -95,17 +96,35 @@ class TaskProvider with ChangeNotifier {
         payload,
         taskId,
       );
-      Tasks task = _tasks.firstWhere((element) => element.taskId == taskId);
-      task.completed = completed;
-      task.taskName = taskName;
-      task.description = taskDescription;
-      task.startTime = startTime;
-      task.endTime = endTime;
-      _tasks[_tasks.indexWhere((element) => element.taskId == taskId)] = task;
+      if (loginResponse.message == "Success") {
+        Tasks task = _tasks.firstWhere((element) => element.taskId == taskId);
+        task.completed = completed;
+        task.taskName = taskName;
+        task.description = taskDescription;
+        task.startTime = startTime;
+        task.endTime = endTime;
+        _tasks[_tasks.indexWhere((element) => element.taskId == taskId)] = task;
+      }
       notifyListeners();
     } catch (error) {
       print(error);
       throw error;
     }
+  }
+
+  Future<void> deleteTask(String taskId) async {
+    final existingTaskIndex =
+        _tasks.indexWhere((element) => element.taskId == taskId);
+    var existingTask = _tasks[existingTaskIndex];
+    _tasks.removeAt(existingTaskIndex);
+    notifyListeners();
+    LoginResponse loginResponse;
+    loginResponse = await AddTaskApi().deleteTask(authToken, taskId);
+    if (loginResponse.message != "Success") {
+      _tasks.insert(existingTaskIndex, existingTask);
+      notifyListeners();
+      throw HttpException("Could not delete Task");
+    }
+    existingTask = null;
   }
 }

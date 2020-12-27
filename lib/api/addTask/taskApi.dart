@@ -36,4 +36,19 @@ class AddTaskApi {
     // print(taskModel.tasks[0].id);
     return loginResponse;
   }
+
+  Future<LoginResponse> deleteTask(String auth, taskId) async {
+    final url = "task/$taskId";
+    var data = await ApiCall().deleteAuth(url, auth);
+    if (data["error"] != null) {
+      print(data["error"]);
+      var loginResponse = LoginResponse.fromJson(data["error"]);
+      throw HttpException(loginResponse.message);
+    }
+    Map<String, dynamic> output = data["result"];
+    print(data["result"]);
+    LoginResponse loginResponse = LoginResponse.fromJson(output);
+    // print(taskModel.tasks[0].id);
+    return loginResponse;
+  }
 }

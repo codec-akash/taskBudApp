@@ -76,6 +76,28 @@ class ApiCall {
     }
   }
 
+  Future<Map<String, dynamic>> deleteAuth(
+    String endPoint,
+    String auth,
+  ) async {
+    var client = new http.Client();
+    String url = BASE_URL + endPoint;
+    print(url);
+    try {
+      var uriResponse = await client.delete(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": auth,
+        },
+      );
+      print(uriResponse.body);
+      return ApiResponseHandler.output(uriResponse);
+    } catch (error) {
+      return ApiResponseHandler.outputError();
+    }
+  }
+
   Future<Map<String, dynamic>> putAuth(
     String endPoint,
     String auth,
