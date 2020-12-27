@@ -1,3 +1,4 @@
+import 'package:Taskbud/Utils/dateUtil.dart';
 import 'package:Taskbud/Utils/global.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/models/task_model.dart';
@@ -202,20 +203,31 @@ class _TaskItemState extends State<TaskItem> {
                     ),
                     Row(
                       children: [
-                        Icon(Icons.ac_unit),
+                        Icon(TaskBudIcon.starttime),
                         SizedBox(
                           width: 10.0,
                         ),
-                        Text(widget.tasks.startTime),
+                        Text(
+                          DateUtil().dateformatDefault(
+                            DateTime.parse(widget.tasks.startTime),
+                          ),
+                        ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 15.0,
                     ),
                     Row(
                       children: [
-                        Icon(Icons.ac_unit),
+                        Icon(TaskBudIcon.endtime),
                         SizedBox(
                           width: 10.0,
                         ),
-                        Text((widget.tasks.endTime)),
+                        Text(
+                          DateUtil().dateformatDefault(
+                            DateTime.parse(widget.tasks.endTime),
+                          ),
+                        ),
                       ],
                     ),
                   ],

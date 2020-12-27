@@ -96,7 +96,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Icon(TaskBudIcon.at_circle),
+                  prefixIcon: Icon(TaskBudIcon.taskname),
                   border: OutlineInputBorder(
                     borderSide: textFieldBorderSide,
                     borderRadius: textFieldBorderRadius,
@@ -119,7 +119,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Icon(TaskBudIcon.at_circle),
+                  prefixIcon: Icon(TaskBudIcon.description),
                   border: OutlineInputBorder(
                     borderSide: textFieldBorderSide,
                     borderRadius: textFieldBorderRadius,

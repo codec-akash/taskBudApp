@@ -116,7 +116,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                 TextFormField(
                   initialValue: _taskName,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(TaskBudIcon.at_circle),
+                    prefixIcon: Icon(TaskBudIcon.taskname),
                     border: OutlineInputBorder(
                       borderSide: textFieldBorderSide,
                       borderRadius: textFieldBorderRadius,
@@ -140,7 +140,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                 TextFormField(
                   initialValue: _taskDescription,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(TaskBudIcon.at_circle),
+                    prefixIcon: Icon(TaskBudIcon.description),
                     border: OutlineInputBorder(
                       borderSide: textFieldBorderSide,
                       borderRadius: textFieldBorderRadius,

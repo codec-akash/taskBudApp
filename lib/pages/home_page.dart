@@ -110,11 +110,11 @@ class _HomePageState extends State<HomePage> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.ac_unit),
+                icon: Icon(TaskBudIcon.addtask),
                 label: 'Add Task',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.ac_unit),
+                icon: Icon(TaskBudIcon.history),
                 label: 'History',
               ),
             ],
