@@ -1,4 +1,4 @@
-package com.taskBud.Taskbud
+package com.example.Taskbud
 
 import io.flutter.embedding.android.FlutterActivity
 
