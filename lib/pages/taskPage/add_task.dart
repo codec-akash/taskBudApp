@@ -54,6 +54,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
           dateStart,
           dateEnd,
         );
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 3),
+            content: Text(
+              "Task Added",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        );
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
       } on HttpException catch (error) {
         print("ONHTTP$error");
         if (mounted) {
@@ -70,6 +87,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
         }
         // _showErrorDialog(errorMessage);
       }
+      _formKey.currentState.reset();
+      startTime = null;
+      endTime = null;
     }
   }
 
@@ -198,21 +218,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
               SizedBox(
                 height: 16.0,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                width: double.infinity,
-                child: RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Text(
-                    "Add Task",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  onPressed: _trySubmit,
-                ),
-              ),
+              isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      width: double.infinity,
+                      child: RaisedButton(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Text(
+                          "Add Task",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        onPressed: _trySubmit,
+                      ),
+                    ),
             ],
           ),
         ),

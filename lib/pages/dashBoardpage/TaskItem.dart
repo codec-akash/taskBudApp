@@ -1,3 +1,4 @@
+import 'package:Taskbud/Utils/app_media_query.dart';
 import 'package:Taskbud/Utils/dateUtil.dart';
 import 'package:Taskbud/Utils/global.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
@@ -23,7 +24,11 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+  var loading = false;
   Future<void> updateTask() async {
+    setState(() {
+      loading = true;
+    });
     try {
       await Provider.of<TaskProvider>(context, listen: false).updateTask(
         widget.tasks.taskName,
@@ -51,6 +56,9 @@ class _TaskItemState extends State<TaskItem> {
         ),
       );
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   void showDialogBox(String taskId) {
@@ -169,19 +177,24 @@ class _TaskItemState extends State<TaskItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.tasks.taskName ?? "",
-                          style: headerStyle,
+                        Container(
+                          width: AppMediaQuery(context).appWidth(58.0),
+                          child: Text(
+                            widget.tasks.taskName ?? "",
+                            style: headerStyle,
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
-                              icon: Icon(
-                                widget.tasks.completed
-                                    ? TaskBudIcon.complete
-                                    : TaskBudIcon.hourglass_2,
-                              ),
+                              icon: loading
+                                  ? CircularProgressIndicator()
+                                  : Icon(
+                                      widget.tasks.completed
+                                          ? TaskBudIcon.complete
+                                          : TaskBudIcon.hourglass_2,
+                                    ),
                               onPressed: updateTask,
                             ),
                             IconButton(

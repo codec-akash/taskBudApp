@@ -47,8 +47,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
           if (mounted) {
             setState(() {
               _isLoading = false;
-              len =
-                  Provider.of<TaskProvider>(context, listen: false).tasklength;
+              len = Provider.of<TaskProvider>(context, listen: false)
+                  .inCompletedLength;
               print(len);
             });
           }
@@ -97,7 +97,13 @@ class _DashBoardPageState extends State<DashBoardPage> {
                   )
                 : len == 0
                     ? Center(
-                        child: Text("No Data"),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("images/empty.png"),
+                            Text("No Data"),
+                          ],
+                        ),
                       )
                     : TaskList(),
       ),

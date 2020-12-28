@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 class TaskProvider with ChangeNotifier {
   List<Tasks> _tasks = [];
   String authToken;
+  int completedTask;
+  int incompletedTask;
   TaskProvider(this.authToken, this._tasks);
 
   List<Tasks> get tasks {
@@ -22,6 +24,14 @@ class TaskProvider with ChangeNotifier {
     return _tasks.length;
   }
 
+  int get completedLength {
+    return completedTask;
+  }
+
+  int get inCompletedLength {
+    return incompletedTask;
+  }
+
   bool isComplete(int i) {
     return _tasks[i].completed;
   }
@@ -29,6 +39,8 @@ class TaskProvider with ChangeNotifier {
   Future<void> fetchTasks() async {
     try {
       List<Tasks> tasks = [];
+      completedTask = 0;
+      incompletedTask = 0;
       TaskModel taskModel = await DashBoardApi().getTaskList(authToken);
       taskModel.tasks.isEmpty
           ? tasks = []
@@ -36,6 +48,14 @@ class TaskProvider with ChangeNotifier {
               tasks.add(element);
             });
       _tasks = tasks;
+      tasks.forEach((element) {
+        if (element.completed == true) {
+          completedTask++;
+        } else {
+          incompletedTask++;
+        }
+      });
+      print("in$incompletedTask");
       notifyListeners();
     } catch (error) {
       print(error);
