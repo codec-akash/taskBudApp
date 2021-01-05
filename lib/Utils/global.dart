@@ -59,6 +59,10 @@ TextStyle secondaryHeader = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle scaffoldHeader = TextStyle(
+  color: Colors.white,
+);
+
 TextStyle headerStyle = TextStyle(
   fontSize: 28.0,
   color: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:Taskbud/pages/reset_password.dart';
 import 'package:Taskbud/pages/signup_page.dart';
 import 'package:Taskbud/pages/splash_screen.dart';
 import 'package:Taskbud/providers/auth.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
                 ),
           routes: {
             SignUpPage.routeName: (ctx) => SignUpPage(),
+            ResetPassword.routeName: (ctx) => ResetPassword(),
           },
         ),
       ),

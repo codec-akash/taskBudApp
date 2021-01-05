@@ -77,6 +77,27 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future<void> resetPassword(String oldPassword, String password) async {
+    final url = "user/resetPassword";
+    Map<String, dynamic> payload = {
+      "oldPassword": oldPassword.trim(),
+      "password": password.trim(),
+    };
+    try {
+      Map<String, dynamic> response =
+          await ApiCall().patchAuth(url, token, payload);
+      if (response["error"] != null) {
+        loginResponse = LoginResponse.fromJson(response["error"]);
+        print("HELLO WORLD ${loginResponse.message}");
+        throw HttpException(loginResponse.message ?? "Error Occured");
+      }
+      loginResponse = LoginResponse.fromJson(response["result"]);
+      print(loginResponse.message);
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
+  }
+
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userToken')) {

@@ -2,6 +2,7 @@ import 'package:Taskbud/Utils/theme.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/pages/dashBoardpage/dashboard_page.dart';
 import 'package:Taskbud/pages/historyPage/history_page.dart';
+import 'package:Taskbud/pages/reset_password.dart';
 import 'package:Taskbud/pages/taskPage/add_task.dart';
 import 'package:Taskbud/providers/auth.dart';
 
@@ -73,6 +74,13 @@ class _HomePageState extends State<HomePage> {
                   theme.toggleTheme();
                 },
               ),
+            ),
+            ListTile(
+              leading: Text("Reset Password"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(ResetPassword.routeName);
+              },
             ),
             ListTile(
               leading: Text("Logout"),
