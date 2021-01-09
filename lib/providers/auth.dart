@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Taskbud/api/api_call.dart';
+import 'package:Taskbud/models/appVersion.dart';
 import 'package:Taskbud/models/http_exception.dart';
 import 'package:Taskbud/models/login_response.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth with ChangeNotifier {
   String _token;
   String _userId;
+
+  String minVersion;
+  String latestVersion;
+
   LoginResponse loginResponse;
 
   bool get isAuth {
@@ -95,6 +100,21 @@ class Auth with ChangeNotifier {
       print(loginResponse.message);
     } catch (e) {
       throw HttpException(e.toString());
+    }
+  }
+
+  Future<void> checkAppVersion() async {
+    final url = "appData";
+    try {
+      Map<String, dynamic> response = await ApiCall().getCall(url);
+      if (response["error"] != null) {
+        throw HttpException("Error Occured");
+      }
+      AppVersion appVersion = AppVersion.fromJson(response['result']);
+      minVersion = appVersion.minappversion;
+      latestVersion = appVersion.latestappversion;
+    } catch (e) {
+      throw HttpException("Error occured");
     }
   }
 

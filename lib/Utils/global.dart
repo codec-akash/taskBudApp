@@ -45,6 +45,8 @@ Gradient backgroundGradient = LinearGradient(
   stops: [0, 1],
 );
 
+String updateShared = "appData";
+
 TextStyle hintStyle = TextStyle(fontSize: 16.0);
 
 TextStyle mainHeader = TextStyle(

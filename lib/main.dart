@@ -1,6 +1,7 @@
 import 'package:Taskbud/pages/reset_password.dart';
 import 'package:Taskbud/pages/signup_page.dart';
 import 'package:Taskbud/pages/splash_screen.dart';
+import 'package:Taskbud/pages/updateApp/updateapp.dart';
 import 'package:Taskbud/providers/auth.dart';
 import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,9 @@ class MyApp extends StatelessWidget {
           title: "Task Bud",
           theme: theme.darkTheme ? dark : light,
           home: auth.isAuth
-              ? HomePage()
+              ? UpdateApp(
+                  child: HomePage(),
+                )
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authSnapShot) =>
