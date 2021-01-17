@@ -2,10 +2,14 @@ import 'package:Taskbud/Utils/app_media_query.dart';
 import 'package:Taskbud/Utils/dateUtil.dart';
 import 'package:Taskbud/Utils/global.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
+import 'package:Taskbud/main.dart';
 import 'package:Taskbud/models/http_exception.dart';
 import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:provider/provider.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -66,6 +70,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
             ),
           ),
         );
+        List<DateTime> notifications =
+            Provider.of<TaskProvider>(context, listen: false)
+                .notificationTimeList;
+        scheduleNotification(notifications);
         if (mounted) {
           setState(() {
             isLoading = false;
@@ -91,6 +99,31 @@ class _AddTaskPageState extends State<AddTaskPage> {
       startTime = null;
       endTime = null;
     }
+  }
+
+  void scheduleNotification(List<DateTime> notifications) async {
+    var androidDetails =
+        AndroidNotificationDetails("taskbud:akash", "TaskBud", "Manage Task");
+    var iosDetails = IOSNotificationDetails();
+    var notificationSettings =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+    for (var i = 0; i < notifications.length; i++) {
+      tz.TZDateTime time =
+          tz.TZDateTime.parse(tz.local, notifications[i].toIso8601String());
+      if (time.isAfter(DateTime.now())) {
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+            i, "title", "body", time, notificationSettings,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            androidAllowWhileIdle: true);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    tz.initializeTimeZones();
+    super.initState();
   }
 
   @override

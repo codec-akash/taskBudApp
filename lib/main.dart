@@ -5,6 +5,8 @@ import 'package:Taskbud/pages/updateApp/updateapp.dart';
 import 'package:Taskbud/providers/auth.dart';
 import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,26 @@ import 'package:Taskbud/pages/home_page.dart';
 
 import 'Utils/theme.dart';
 
-void main() => runApp(MyApp());
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var androidInitialize = AndroidInitializationSettings('app_icon');
+  var iosInitialize = IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true);
+  var initializeSettings =
+      InitializationSettings(android: androidInitialize, iOS: iosInitialize);
+  await flutterLocalNotificationsPlugin.initialize(
+    initializeSettings,
+    onSelectNotification: (payload) async {
+      print(payload ?? "No Payload");
+    },
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

@@ -14,6 +14,7 @@ class TaskProvider with ChangeNotifier {
   String authToken;
   int completedTask;
   int incompletedTask;
+  List<DateTime> notificationList = [];
   TaskProvider(this.authToken, this._tasks);
 
   List<Tasks> get tasks {
@@ -30,6 +31,10 @@ class TaskProvider with ChangeNotifier {
 
   int get inCompletedLength {
     return incompletedTask;
+  }
+
+  List get notificationTimeList {
+    return notificationList;
   }
 
   bool isComplete(int i) {
@@ -83,6 +88,7 @@ class TaskProvider with ChangeNotifier {
           await AddTaskApi().addTask(authToken, payload);
       if (taskAddModel.message == "Success") {
         print("SUCEESS");
+        notificationList.add(DateTime.parse(startTime));
       }
       notifyListeners();
     } catch (error) {
