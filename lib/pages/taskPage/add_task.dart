@@ -4,6 +4,7 @@ import 'package:Taskbud/Utils/global.dart';
 import 'package:Taskbud/icons/task_bud_icon_icons.dart';
 import 'package:Taskbud/main.dart';
 import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/models/local_notification_model.dart';
 import 'package:Taskbud/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -70,7 +71,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             ),
           ),
         );
-        List<DateTime> notifications =
+        List<LocalNotificationModel> notifications =
             Provider.of<TaskProvider>(context, listen: false)
                 .notificationTimeList;
         scheduleNotification(notifications);
@@ -101,18 +102,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  void scheduleNotification(List<DateTime> notifications) async {
+  void scheduleNotification(List<LocalNotificationModel> notifications) async {
     var androidDetails =
         AndroidNotificationDetails("taskbud:akash", "TaskBud", "Manage Task");
     var iosDetails = IOSNotificationDetails();
     var notificationSettings =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
     for (var i = 0; i < notifications.length; i++) {
-      tz.TZDateTime time =
-          tz.TZDateTime.parse(tz.local, notifications[i].toIso8601String());
+      tz.TZDateTime time = tz.TZDateTime.parse(
+          tz.local, notifications[i].startTime.toIso8601String());
       if (time.isAfter(DateTime.now())) {
         await flutterLocalNotificationsPlugin.zonedSchedule(
-            i, "title", "body", time, notificationSettings,
+            i,
+            "Task Started",
+            "Your task ${notifications[i].message} has started",
+            time,
+            notificationSettings,
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime,
             androidAllowWhileIdle: true);
