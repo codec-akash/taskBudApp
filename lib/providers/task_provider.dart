@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:Taskbud/api/addTask/taskApi.dart';
 import 'package:Taskbud/api/dashboard/getTask.dart';
 import 'package:Taskbud/models/http_exception.dart';
+import 'package:Taskbud/models/local_notification_model.dart';
 import 'package:Taskbud/models/login_response.dart';
 import 'package:Taskbud/models/task_add_model.dart';
 import 'package:Taskbud/models/task_model.dart';
@@ -15,6 +16,8 @@ class TaskProvider with ChangeNotifier {
   int completedTask;
   int incompletedTask;
   List<DateTime> notificationList = [];
+  List<LocalNotificationModel> testNotify = [];
+
   TaskProvider(this.authToken, this._tasks);
 
   List<Tasks> get tasks {
@@ -34,7 +37,8 @@ class TaskProvider with ChangeNotifier {
   }
 
   List get notificationTimeList {
-    return notificationList;
+    // return notificationList;
+    return testNotify;
   }
 
   bool isComplete(int i) {
@@ -89,6 +93,10 @@ class TaskProvider with ChangeNotifier {
       if (taskAddModel.message == "Success") {
         print("SUCEESS");
         notificationList.add(DateTime.parse(startTime));
+        LocalNotificationModel notify = LocalNotificationModel();
+        notify.startTime = DateTime.parse(startTime);
+        notify.message = taskName;
+        testNotify.add(notify);
       }
       notifyListeners();
     } catch (error) {
