@@ -178,7 +178,7 @@ class _TaskItemState extends State<TaskItem> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          width: AppMediaQuery(context).appWidth(58.0),
+                          width: AppMediaQuery(context).appWidth(55.5),
                           child: Text(
                             widget.tasks.taskName ?? "",
                             style: headerStyle,

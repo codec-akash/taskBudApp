@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UpdateApp extends StatefulWidget {
   final Widget child;
@@ -23,6 +24,10 @@ class _UpdateAppState extends State<UpdateApp> {
   bool isInit = true;
   String minVersion;
   String latestVersion;
+
+  _lauchUrl() async {
+    await launch(PLAY_STORE_URL);
+  }
 
   @override
   void didChangeDependencies() async {
@@ -96,7 +101,7 @@ class _UpdateAppState extends State<UpdateApp> {
   }
 
   _onUpdateNowClicked() {
-    print('On update app clicked');
+    _lauchUrl();
   }
 
   _showCompulsoryUpdateDialog(context, String message) async {
