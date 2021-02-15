@@ -37,6 +37,7 @@ dependencies:
   pub_semver: ^1.4.4
   package_info: ^0.4.3+2
   flutter_local_notifications: ^3.0.3
+  pie_chart: ^4.0.1
 
 dev_dependencies:
   flutter_test:

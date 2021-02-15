@@ -32,6 +32,7 @@ class Tasks {
   bool completed;
   String startTime;
   String endTime;
+  String category;
 
   Tasks(
       {this.id,
@@ -41,7 +42,8 @@ class Tasks {
       this.description,
       this.completed,
       this.startTime,
-      this.endTime});
+      this.endTime,
+      this.category});
 
   Tasks.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -52,6 +54,7 @@ class Tasks {
     completed = json['completed'];
     startTime = json['start_time'];
     endTime = json['end_time'];
+    category = json['category'] ?? "No Category";
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +67,7 @@ class Tasks {
     data['completed'] = this.completed;
     data['start_time'] = this.startTime;
     data['end_time'] = this.endTime;
+    data['category'] = this.category;
     return data;
   }
 }

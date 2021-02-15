@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Taskbud/api/addTask/taskApi.dart';
 import 'package:Taskbud/api/dashboard/getTask.dart';
+import 'package:Taskbud/models/category_model.dart';
 import 'package:Taskbud/models/http_exception.dart';
 import 'package:Taskbud/models/local_notification_model.dart';
 import 'package:Taskbud/models/login_response.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 
 class TaskProvider with ChangeNotifier {
   List<Tasks> _tasks = [];
+  List<CategoryModel> category = [];
+  Map<String, double> categoryChart = {};
   String authToken;
   int completedTask;
   int incompletedTask;
@@ -22,6 +25,10 @@ class TaskProvider with ChangeNotifier {
 
   List<Tasks> get tasks {
     return [..._tasks];
+  }
+
+  Map<String, double> get categoryData {
+    return categoryChart;
   }
 
   int get tasklength {
@@ -70,6 +77,15 @@ class TaskProvider with ChangeNotifier {
       print(error);
       throw error;
     }
+  }
+
+  Future<void> getCategory() async {
+    category = await DashBoardApi().getCategoryData(authToken);
+    category.forEach((element) {
+      categoryChart.addAll(
+          {"${element.category}": double.parse(element.hours.toString())});
+    });
+    notifyListeners();
   }
 
   Future<void> addTask(

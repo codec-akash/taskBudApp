@@ -214,6 +214,10 @@ class _TaskItemState extends State<TaskItem> {
                     SizedBox(
                       height: 10.0,
                     ),
+                    Text("Category : ${widget.tasks.category}"),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     Row(
                       children: [
                         Icon(TaskBudIcon.starttime),
