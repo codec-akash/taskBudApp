@@ -82,8 +82,13 @@ class TaskProvider with ChangeNotifier {
   Future<void> getCategory() async {
     category = await DashBoardApi().getCategoryData(authToken);
     category.forEach((element) {
-      categoryChart.addAll(
-          {"${element.category}": double.parse(element.hours.toString())});
+      categoryChart.addAll({
+        element.category ?? "No Category":
+            double.parse(element.hours.toString())
+      });
+    });
+    categoryChart.forEach((key, value) {
+      print(key);
     });
     notifyListeners();
   }

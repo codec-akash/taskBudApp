@@ -133,7 +133,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
                         ),
                       )
                     : Container(
-                        height: AppMediaQuery(context).appHeight(62.0),
                         child: TaskList(),
                       ),
       ),
